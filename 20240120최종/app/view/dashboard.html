@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Noto sans KR폰트 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- 공통 CSS 임포트 -->
+    <link rel="stylesheet" href="/resource/style/common.css">
+
+    <!-- 대시보드 CSS 임포트 -->
+    <link rel="stylesheet" href="/resource/style/dashboard.css">
+
+</head>
+<body class="iframe-root">
+    <main class="contents-wrap">
+        <section class="contents-container">
+            <div class="title-wrap">
+                <h1>Dashboard</h1>
+            </div>
+
+            <h2>GitHub</h2>
+            <div class="dashboard-row1">
+                <div class="row1-col1">
+                    <div class="card">
+                        <div class="card-header">Profile</div>
+                        <div class="card-body">
+                            <img id="profile-img">
+                            <div class="card-contents">
+                                <div id="profile-name"></div>
+                                <div id="profile-email"></div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-contents">
+                                <div id="profile-bio"></div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a class="btn-primary" type="button" id="profile-url" target="_blank">Go to GitHub</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row1-col2">
+                    <div class="card">
+                        <div class="card-header">Repositories</div>
+                        <div class="card-body">
+                            <div class="list" id="repositories">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-row2">
+                <div class="row1-col1">
+                    <div class="card">
+                        <div class="card-header">Gists</div>
+                        <div class="card-body">
+                            <div class="files" id="gists"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script type="text/javascript" src="/resource/script/dashboard.js"></script>
+</body>
+</html>
