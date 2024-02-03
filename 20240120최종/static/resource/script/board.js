@@ -1,4 +1,14 @@
 let params = {};
+
+const pagination = {
+    total       : 0,                    // 총 게시글 개수
+    totalpage   : 0,                    // 총 페이지 번호
+    maxPost     : 15,                   // 최대 표시 가능한 게시글 개수
+    maxList     : 5,                    // 최대 페이지 리스트 개수
+    currPage    : 1,                    // 현재 페이지 번호
+    currRange   : {start: 0, end: 0},   // 현재 페이지 리스트 범위
+    category_id : '',                   // 현재 카테고리 id
+};
 window.addEventListener('DOMContentLoaded', function() {
     loadCategories();
     //[[기존 호출 삭제]]
@@ -33,7 +43,9 @@ async function loadCategories() {
 
         //[[클릭이벤트 추가]]
         a.addEventListener('click', function(){
-            loadPosts(category.category_id);
+            // loadPosts(category.category_id);
+            // countPost(category.category_id);
+            paginationInit(category.category_id);
         });
         categoryList.append(a);
 
@@ -82,6 +94,82 @@ async function loadPosts(category_id) {
         a.append(divView);
 
         postList.append(a);
+    }
+}
+
+/**
+ * 게시글 집계하기
+ */
+async function countPost(category_id) {
+    let response = await fetch(
+        `/board-api/post/count?category_id=${category_id}`,
+        {
+            method: 'GET',
+            headers: {'Content-Type': 'application/json'}
+        }
+    );
+
+    let result = await response.json();
+
+    console.log(result);
+
+    return result.count;
+}
+
+/**
+ * 페이지네이션 초기화
+ */
+async function paginationInit(category_id) {
+    pagination.total     = await countPost(category_id);
+    pagination.totalpage = Math.ceil(pagination.total / pagination.maxPost);
+    pagination.currPage  = 1;
+
+    pagination.currRange.start  = Math.min(pagination.totalpage, 1);
+    pagination.currRange.end    = Math.max(pagination.totalpage, 0);
+
+    pagination.category_id = category_id;
+
+    setupPageList();
+
+}
+
+/**
+ * 페이지 리스트 설정
+ */
+function setupPageList() {
+    let pageList = document.querySelector('#page-list');
+
+    // 구조분해 할당 (객체의 속성을 구조를 분해하여 변수로 바로 받음)
+    let {start, end} = pagination.currRange;
+
+    pageList.innerHTML = ''; // 기존 페이지 번호 제거
+    for (let num = start; num <= end; num++) {
+        let pageDiv = document.createElement('div');
+        pageDiv.className = 'page';
+        pageDiv.innerText = num;
+        pageDiv.setAttribute('data-value', num);
+        pageDiv.addEventListener('click', function() {
+            setPage(num)
+        });
+
+        pageList.append(pageDiv);
+    }
+}
+
+function setPage(num) {
+
+    // 내가 누른 페이지 번호
+    let pageDiv = document.querySelector(`.page[data-value="${num}"]`);
+    // 내가 누르지 않은 패이지 번호
+    let otherPageDiv = document.querySelectorAll(`.page:not([data-value="${num}"])`);
+
+    // 누른 번호 표시
+    if (pageDiv != null) {
+        pageDiv.className += ' on';
+    }
+    // 누르지 않은 번호 표시 제거
+    for (let other of otherPageDiv) {
+        other.className = other.className.replace(' on', '');
     }
 
 }

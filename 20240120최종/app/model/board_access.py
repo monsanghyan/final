@@ -6,19 +6,15 @@ class BoardAccess:
     게시판에 관련된 데이터에 접근하는
     Database Access Object(DAO)
     """
-    def __init__(self):
-        """
-        BoardAccess 생성자
-        """
-        self.db = DBInterface()
 
     def find_all_category(self):
         """
         모든 카테고리 반환
         """
-        self.db.connect()
+        db = DBInterface()
+        db.connect()
 
-        result = self.db.fetch_query("""
+        result = db.fetch_query("""
             SELECT category_id,
                    title,
                    datetime(crt, 'localtime'),
@@ -27,7 +23,7 @@ class BoardAccess:
             ORDER BY title
         """)
 
-        self.db.disconnect()
+        db.disconnect()
 
         if len(result) == 0:
             return []
@@ -45,9 +41,10 @@ class BoardAccess:
         """
         ID값을 통해 카테고리를 찾는다
         """
-        self.db.connect()
+        db = DBInterface()
+        db.connect()
 
-        result = self.db.fetch_query("""
+        result = db.fetch_query("""
             SELECT category_id,
                    title,
                    datetime(crt, 'localtime'),
@@ -56,7 +53,7 @@ class BoardAccess:
             WHERE category_id = ?
         """, category_id)
 
-        self.db.disconnect()
+        db.disconnect()
 
         # 검색결과 없으면 None 반환
         if len(result) == 0:
@@ -74,35 +71,38 @@ class BoardAccess:
         """
         새로운 카테고리를 생성
         """
-        self.db.connect()
+        db = DBInterface()
+        db.connect()
 
-        self.db.execute_query("""
+        db.execute_query("""
             INSERT INTO Category(title) 
             VALUES(?)
         """, title)
 
-        self.db.disconnect()
+        db.disconnect()
 
     def create_post(self, category_id, title, content):
         """
         새로운 게시글을 생성
         """
-        self.db.connect()
+        db = DBInterface()
+        db.connect()
 
-        self.db.execute_query("""
+        db.execute_query("""
             INSERT INTO Post(category_id, title, content)
             VALUES(?, ?, ?)
         """, category_id, title, content)
 
-        self.db.disconnect()
+        db.disconnect()
 
     def find_all_post(self, category_id):
         """
         카테고리 하위의 모든 게시글 검색
         """
-        self.db.connect()
+        db = DBInterface()
+        db.connect()
 
-        posts = self.db.fetch_query("""
+        posts = db.fetch_query("""
             SELECT post_id,
                    title,
                    content,
@@ -114,7 +114,7 @@ class BoardAccess:
             ORDER BY crt DESC
         """, category_id)
 
-        self.db.disconnect()
+        db.disconnect()
 
         if len(posts) == 0:
             return []
@@ -135,9 +135,10 @@ class BoardAccess:
         """
         특정 게시글을 불러온다
         """
-        self.db.connect()
+        db = DBInterface()
+        db.connect()
 
-        result = self.db.fetch_query("""
+        result = db.fetch_query("""
             SELECT p.post_id,
                     p.title,
                     p.content,
@@ -151,7 +152,7 @@ class BoardAccess:
             WHERE p.post_id = ?
         """, post_id)
 
-        self.db.disconnect()
+        db.disconnect()
 
         if len(result) == 0:
             return None
@@ -164,3 +165,22 @@ class BoardAccess:
             'view': result[0][5],
             'category': result[0][6]
         }
+
+    def count_post_by_category_id(self, category_id):
+        """
+        카테고리 하위의 모든 게시글 개수 집계
+        """
+        db = DBInterface()
+        db.connect()
+
+        result = db.fetch_query("""
+            SELECT COUNT(*)
+            FROM Post
+            WHERE category_id = ?
+            """, category_id)
+
+        db.disconnect()
+
+        if len(result) == 0:
+            return 0
+        return result[0][0]

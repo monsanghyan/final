@@ -34,3 +34,11 @@ def post_write():
 def post_list():
     posts = board_service.get_posts(request.args.get('category_id'))
     return jsonify(posts)
+
+@board_bp.route('/post/count', methods=['GET'])
+def count_post():
+    category_id = request.args.get('category_id')
+    count = board_service.count_post(category_id)
+    return jsonify({
+        'count': count
+    })
