@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Noto sans KR폰트 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- 공통 CSS 임포트 -->
+    <link rel="stylesheet" href="/resource/style/common.css">
+
+    <title>TEST</title>
+</head>
+<body class="root">
+
+    <!-- 메뉴 Navigation -->
+    <nav class="nav-container" id="navbar">
+        <a class="nav-menu home" href="/dashboard"></a>
+        <a class="nav-menu" href="/practice">Practice</a>
+        <a class="nav-menu" href="/board">Board</a>
+    </nav>
+
+    <!-- 페이지 iframe -->
+    <main class="page-iframe-wrap" id="page-wrap"></main>
+
+    <!-- 페이지 렌더링용 히든 블록 -->
+    <div style="display: none;" id="page-render-wrap"></div>
+
+    <!-- 공통 JS 임포트 -->
+    <script type="text/javascript" src="/resource/script/common.js"></script>
+</body>
+</html>
